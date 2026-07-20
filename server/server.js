@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectDB from "./config/db.js";
 
 dotenv.config();
+
+connectDB();
 
 const app = express();
 
@@ -11,7 +14,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Backend is running successfully!"
+    message: "Backend is running successfully!",
   });
 });
 
