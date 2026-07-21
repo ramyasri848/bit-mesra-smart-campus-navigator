@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import protectedRoutes from "./routes/protectedRoutes.js";
 import buildingRoutes from "./routes/buildingRoutes.js";
 import roadRoutes from "./routes/roadRoutes.js";
+import routeRoutes from "./routes/routeRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", protectedRoutes);
 app.use("/api/buildings", buildingRoutes);
 app.use("/api/roads", roadRoutes);
+app.use("/api/routes", routeRoutes);
 
 app.get("/", (req, res) => {
   res.json({
