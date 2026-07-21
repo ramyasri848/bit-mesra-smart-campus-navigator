@@ -17,6 +17,9 @@ class Graph
 private:
     unordered_map<string, vector<pair<string, int>>> adjacencyList;
 
+    void dfsHelper(string node,
+                   set<string> &visited);
+
 public:
     void addBuilding(string name);
 
@@ -30,6 +33,8 @@ public:
                   string destination);
 
     void bfs(string start);
+
+    void dfs(string start);
 };
 
 #endif

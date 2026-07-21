@@ -20,5 +20,7 @@ int main()
 
     campus.bfs("Hostel 8");
 
+    campus.dfs("Hostel 8");
+
     return 0;
 }

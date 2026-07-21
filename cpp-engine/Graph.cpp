@@ -148,3 +148,27 @@ void Graph::bfs(string start)
         }
     }
 }
+void Graph::dfsHelper(string node,
+                      set<string> &visited)
+{
+    visited.insert(node);
+
+    cout << node << endl;
+
+    for (auto neighbor : adjacencyList[node])
+    {
+        if (visited.find(neighbor.first) == visited.end())
+        {
+            dfsHelper(neighbor.first, visited);
+        }
+    }
+}
+
+void Graph::dfs(string start)
+{
+    set<string> visited;
+
+    cout << "\n===== DFS Traversal =====\n\n";
+
+    dfsHelper(start, visited);
+}
