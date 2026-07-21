@@ -3,23 +3,25 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup
+  Popup,
+  Polyline
 } from "react-leaflet";
 import axios from "axios";
 
 const CampusMap = () => {
 
   const [buildings, setBuildings] = useState([]);
+  const [roads, setRoads] = useState([]);
 
   useEffect(() => {
 
-    const fetchBuildings = async () => {
+    const fetchData = async () => {
 
       try {
 
         const token = localStorage.getItem("token");
 
-        const response = await axios.get(
+        const buildingResponse = await axios.get(
           "http://localhost:5000/api/buildings",
           {
             headers: {
@@ -28,7 +30,17 @@ const CampusMap = () => {
           }
         );
 
-        setBuildings(response.data.data);
+        const roadResponse = await axios.get(
+          "http://localhost:5000/api/roads",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        setBuildings(buildingResponse.data.data);
+        setRoads(roadResponse.data.data);
 
       } catch (error) {
         console.log(error);
@@ -36,9 +48,24 @@ const CampusMap = () => {
 
     };
 
-    fetchBuildings();
+    fetchData();
 
   }, []);
+
+  const getCoordinates = (id) => {
+
+    const building = buildings.find(
+      (b) => b._id === id
+    );
+
+    if (!building) return null;
+
+    return [
+      building.latitude,
+      building.longitude
+    ];
+
+  };
 
   return (
 
@@ -52,7 +79,7 @@ const CampusMap = () => {
     >
 
       <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
+        attribution="© OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
@@ -85,6 +112,30 @@ const CampusMap = () => {
         </Marker>
 
       ))}
+
+      {roads.map((road) => {
+
+        const source = getCoordinates(
+          road.source._id
+        );
+
+        const destination = getCoordinates(
+          road.destination._id
+        );
+
+        if (!source || !destination) return null;
+
+        return (
+          <Polyline
+            key={road._id}
+            positions={[
+              source,
+              destination
+            ]}
+          />
+        );
+
+      })}
 
     </MapContainer>
 
