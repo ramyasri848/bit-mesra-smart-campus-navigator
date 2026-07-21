@@ -16,10 +16,9 @@ int main()
 
     campus.displayGraph();
 
-    campus.dijkstra(
-        "Hostel 8",
-        "Library"
-    );
+    campus.dijkstra("Hostel 8", "Library");
+
+    campus.bfs("Hostel 8");
 
     return 0;
 }

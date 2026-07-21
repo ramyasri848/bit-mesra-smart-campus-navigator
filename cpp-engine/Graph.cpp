@@ -117,3 +117,34 @@ void Graph::dijkstra(string source,
          << distance[destination]
          << " meters\n";
 }
+void Graph::bfs(string start)
+{
+    queue<string> q;
+
+    set<string> visited;
+
+    q.push(start);
+
+    visited.insert(start);
+
+    cout << "\n===== BFS Traversal =====\n\n";
+
+    while (!q.empty())
+    {
+        string current = q.front();
+
+        q.pop();
+
+        cout << current << endl;
+
+        for (auto neighbor : adjacencyList[current])
+        {
+            if (visited.find(neighbor.first) == visited.end())
+            {
+                visited.insert(neighbor.first);
+
+                q.push(neighbor.first);
+            }
+        }
+    }
+}

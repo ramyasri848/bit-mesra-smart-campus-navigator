@@ -8,6 +8,7 @@
 #include <limits>
 #include <string>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
@@ -27,6 +28,8 @@ public:
 
     void dijkstra(string source,
                   string destination);
+
+    void bfs(string start);
 };
 
 #endif
