@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import protectedRoutes from "./routes/protectedRoutes.js";
 import buildingRoutes from "./routes/buildingRoutes.js";
+import roadRoutes from "./routes/roadRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api", protectedRoutes);
 app.use("/api/buildings", buildingRoutes);
+app.use("/api/roads", roadRoutes);
 
 app.get("/", (req, res) => {
   res.json({
