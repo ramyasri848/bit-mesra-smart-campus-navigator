@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include "Trie.h"
 
 int main()
 {
@@ -21,6 +22,23 @@ int main()
     campus.bfs("Hostel 8");
 
     campus.dfs("Hostel 8");
+
+    cout << "\n===== Trie Search =====\n\n";
+
+    Trie trie;
+
+    trie.insert("Library");
+    trie.insert("Library Block A");
+    trie.insert("Library Block B");
+    trie.insert("Lab 101");
+    trie.insert("Lab 202");
+
+    vector<string> result = trie.searchPrefix("Lib");
+
+    for(string building : result)
+    {
+        cout << building << endl;
+    }
 
     return 0;
 }
