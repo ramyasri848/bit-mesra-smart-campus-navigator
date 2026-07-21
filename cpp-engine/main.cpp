@@ -16,5 +16,10 @@ int main()
 
     campus.displayGraph();
 
+    campus.dijkstra(
+        "Hostel 8",
+        "Library"
+    );
+
     return 0;
 }
