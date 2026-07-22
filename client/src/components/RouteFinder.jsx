@@ -1,91 +1,131 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { RouteContext } from "./RouteContext";
 
 const RouteFinder = () => {
+
   const [buildings, setBuildings] = useState([]);
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
-  const [result, setResult] = useState(null);
+
+  const {
+    setRoutePath,
+    setDistance,
+    setWalkingTime
+  } = useContext(RouteContext);
 
   useEffect(() => {
+
     const fetchBuildings = async () => {
+
       try {
+
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
           "http://localhost:5000/api/buildings",
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-            },
+              Authorization: `Bearer ${token}`
+            }
           }
         );
 
         setBuildings(response.data.data);
+
       } catch (error) {
+
         console.error(error);
+
       }
+
     };
 
     fetchBuildings();
+
   }, []);
 
   const findRoute = async () => {
+
     if (!source || !destination) {
+
       alert("Please select both source and destination.");
       return;
+
     }
 
     try {
+
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
         "http://localhost:5000/api/routes/shortest-path",
         {
           source,
-          destination,
+          destination
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         }
       );
 
       console.log("Backend Response:", response.data);
 
-      setResult(response.data);
+      setRoutePath(response.data.path || []);
+      setDistance(response.data.distance || 0);
+      setWalkingTime(response.data.walkingTime || 0);
+
     } catch (error) {
+
       console.error(error);
 
       if (error.response) {
+
         alert(error.response.data.message);
+
       } else {
+
         alert("Unable to connect to the server.");
+
       }
+
     }
+
   };
 
   return (
+
     <div
       style={{
         padding: "20px",
-        background: "#ffffff",
+        background: "#ffffff"
       }}
     >
+
       <h2>Shortest Route Finder</h2>
 
       <select
         value={source}
         onChange={(e) => setSource(e.target.value)}
       >
-        <option value="">Select Source</option>
+
+        <option value="">
+          Select Source
+        </option>
 
         {buildings.map((building) => (
-          <option key={building._id} value={building._id}>
+
+          <option
+            key={building._id}
+            value={building._id}
+          >
             {building.name}
           </option>
+
         ))}
+
       </select>
 
       <br />
@@ -95,13 +135,22 @@ const RouteFinder = () => {
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
       >
-        <option value="">Select Destination</option>
+
+        <option value="">
+          Select Destination
+        </option>
 
         {buildings.map((building) => (
-          <option key={building._id} value={building._id}>
+
+          <option
+            key={building._id}
+            value={building._id}
+          >
             {building.name}
           </option>
+
         ))}
+
       </select>
 
       <br />
@@ -111,40 +160,10 @@ const RouteFinder = () => {
         Find Shortest Route
       </button>
 
-      {result && (
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "15px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            backgroundColor: "#f8f9fa",
-          }}
-        >
-          <h3>Shortest Route Result</h3>
-
-          {result.success ? (
-            <pre
-              style={{
-                whiteSpace: "pre-wrap",
-                fontSize: "16px",
-                background: "#fff",
-                padding: "15px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-              }}
-            >
-              {result.output}
-            </pre>
-          ) : (
-            <p style={{ color: "red" }}>
-              {result.message}
-            </p>
-          )}
-        </div>
-      )}
     </div>
+
   );
+
 };
 
 export default RouteFinder;

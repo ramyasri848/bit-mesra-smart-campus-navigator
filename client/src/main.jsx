@@ -5,8 +5,12 @@ import "./index.css";
 import "leaflet/dist/leaflet.css";
 import "./leafletIcons";
 
+import { RouteProvider } from "./components/RouteContext";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouteProvider>
+            <App />
+        </RouteProvider>
+    </React.StrictMode>
 );

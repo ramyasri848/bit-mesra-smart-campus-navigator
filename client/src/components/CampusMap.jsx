@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -8,10 +8,18 @@ import {
 } from "react-leaflet";
 import axios from "axios";
 
+import { RouteContext } from "./RouteContext";
+
 const CampusMap = () => {
 
   const [buildings, setBuildings] = useState([]);
   const [roads, setRoads] = useState([]);
+
+  const {
+    routePath,
+    distance,
+    walkingTime
+  } = useContext(RouteContext);
 
   useEffect(() => {
 
@@ -43,7 +51,9 @@ const CampusMap = () => {
         setRoads(roadResponse.data.data);
 
       } catch (error) {
+
         console.log(error);
+
       }
 
     };
@@ -67,77 +77,133 @@ const CampusMap = () => {
 
   };
 
-  return (
+  // Highlighted shortest route
 
-    <MapContainer
-      center={[23.4165, 85.4408]}
-      zoom={16}
-      style={{
-        height: "100vh",
-        width: "100%"
-      }}
-    >
+  const highlightedRoute = [];
 
-      <TileLayer
-        attribution="© OpenStreetMap contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+const safeRoute = routePath || [];
 
-      {buildings.map((building) => (
+for (let i = 0; i < safeRoute.length; i++) {
 
-        <Marker
-          key={building._id}
-          position={[
+    const building = buildings.find(
+        b => b.name === safeRoute[i]
+    );
+
+    if (building) {
+
+        highlightedRoute.push([
             building.latitude,
             building.longitude
-          ]}
-        >
+        ]);
 
-          <Popup>
+    }
 
-            <h3>{building.name}</h3>
+}
 
-            <p>
-              <strong>Code:</strong> {building.code}
-            </p>
+  return (
 
-            <p>
-              <strong>Category:</strong> {building.category}
-            </p>
+    <>
 
-            <p>{building.description}</p>
+      <MapContainer
+        center={[23.4165, 85.4408]}
+        zoom={16}
+        style={{
+          height: "80vh",
+          width: "100%"
+        }}
+      >
 
-          </Popup>
+        <TileLayer
+          attribution="© OpenStreetMap contributors"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-        </Marker>
+        {buildings.map((building) => (
 
-      ))}
-
-      {roads.map((road) => {
-
-        const source = getCoordinates(
-          road.source._id
-        );
-
-        const destination = getCoordinates(
-          road.destination._id
-        );
-
-        if (!source || !destination) return null;
-
-        return (
-          <Polyline
-            key={road._id}
-            positions={[
-              source,
-              destination
+          <Marker
+            key={building._id}
+            position={[
+              building.latitude,
+              building.longitude
             ]}
-          />
-        );
+          >
 
-      })}
+            <Popup>
 
-    </MapContainer>
+              <h3>{building.name}</h3>
+
+              <p>
+                <strong>Code:</strong> {building.code}
+              </p>
+
+              <p>
+                <strong>Category:</strong> {building.category}
+              </p>
+
+              <p>{building.description}</p>
+
+            </Popup>
+
+          </Marker>
+
+        ))}
+
+        {roads.map((road) => {
+
+          const source = getCoordinates(
+            road.source._id
+          );
+
+          const destination = getCoordinates(
+            road.destination._id
+          );
+
+          if (!source || !destination) return null;
+
+          return (
+
+            <Polyline
+              key={road._id}
+              positions={[
+                source,
+                destination
+              ]}
+            />
+
+          );
+
+        })}
+
+        {/* Highlight shortest path */}
+
+        <Polyline
+          positions={highlightedRoute}
+          color="blue"
+          weight={6}
+        />
+
+      </MapContainer>
+
+      <div
+        style={{
+          padding: "20px",
+          background: "white"
+        }}
+      >
+
+        <h3>Navigation Details</h3>
+
+        <p>
+          <strong>Distance:</strong> {distance} meters
+        </p>
+
+        <p>
+          <strong>Walking Time:</strong> {walkingTime} minutes
+        </p>
+
+      </div>
+
+    </>
 
   );
 
