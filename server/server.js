@@ -9,6 +9,7 @@ import buildingRoutes from "./routes/buildingRoutes.js";
 import roadRoutes from "./routes/roadRoutes.js";
 import routeRoutes from "./routes/routeRoutes.js";
 import scheduleRoutes from "./routes/scheduleRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/buildings", buildingRoutes);
 app.use("/api/roads", roadRoutes);
 app.use("/api/routes", routeRoutes);
 app.use("/api/schedules", scheduleRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
   res.json({
