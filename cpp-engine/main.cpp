@@ -1,44 +1,50 @@
 #include "Graph.h"
-#include "Trie.h"
+#include "include/json.hpp"
+
+#include <fstream>
+
+using json = nlohmann::json;
 
 int main()
 {
     Graph campus;
 
-    campus.addBuilding("Hostel 8");
-    campus.addBuilding("CSE");
-    campus.addBuilding("Library");
-    campus.addBuilding("Cafeteria");
+    // Read graph.json
+    std::ifstream graphFile("graph.json");
 
-    campus.addRoad("Hostel 8", "CSE", 350);
-    campus.addRoad("CSE", "Library", 200);
-    campus.addRoad("Library", "Cafeteria", 150);
-    campus.addRoad("Hostel 8", "Cafeteria", 500);
+    json graphData;
 
-    campus.displayGraph();
+    graphFile >> graphData;
 
-    campus.dijkstra("Hostel 8", "Library");
-
-    campus.bfs("Hostel 8");
-
-    campus.dfs("Hostel 8");
-
-    cout << "\n===== Trie Search =====\n\n";
-
-    Trie trie;
-
-    trie.insert("Library");
-    trie.insert("Library Block A");
-    trie.insert("Library Block B");
-    trie.insert("Lab 101");
-    trie.insert("Lab 202");
-
-    vector<string> result = trie.searchPrefix("Lib");
-
-    for(string building : result)
+    // Add buildings
+    for (auto building : graphData["buildings"])
     {
-        cout << building << endl;
+        campus.addBuilding(building["name"]);
     }
+
+    // Add roads
+    for (auto road : graphData["roads"])
+    {
+        campus.addRoad(
+            road["sourceName"],
+            road["destinationName"],
+            road["distance"]
+        );
+    }
+
+    // Read input.json
+    std::ifstream inputFile("input.json");
+
+    json input;
+
+    inputFile >> input;
+
+    std::string source = input["source"];
+
+    std::string destination = input["destination"];
+
+    // Run Dijkstra
+    campus.dijkstra(source, destination);
 
     return 0;
 }

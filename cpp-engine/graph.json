@@ -1,41 +1,17 @@
 {
   "buildings": [
     {
-      "_id": "6a5f3fe979fde93c4685761e",
-      "name": "Computer Science Department",
-      "code": "CSE",
-      "category": "Academic",
-      "latitude": 23.4165,
-      "longitude": 85.4408,
-      "description": "Department of Computer Science and Engineering",
-      "createdAt": "2026-07-21T09:46:17.194Z",
-      "updatedAt": "2026-07-21T09:46:17.194Z",
-      "__v": 0
+      "name": "Hostel 8"
     },
     {
-      "_id": "6a5f4772a7c5ecd12cc5d8f7",
-      "name": "Central Library",
-      "code": "LIB",
-      "category": "Academic",
-      "latitude": 23.4123,
-      "longitude": 85.4401,
-      "description": "Main library of BIT Mesra",
-      "createdAt": "2026-07-21T10:18:26.887Z",
-      "updatedAt": "2026-07-21T10:18:26.887Z",
-      "__v": 0
+      "name": "Central Library"
     }
   ],
   "roads": [
     {
-      "_id": "6a5f49a7a7c5ecd12cc5d8fc",
-      "source": "6a5f4772a7c5ecd12cc5d8f7",
-      "destination": "6a5f3fe979fde93c4685761e",
-      "distance": 350,
-      "walkingTime": 5,
-      "status": "Open",
-      "createdAt": "2026-07-21T10:27:51.913Z",
-      "updatedAt": "2026-07-21T10:27:51.913Z",
-      "__v": 0
+      "sourceName": "Central Library",
+      "destinationName": "Hostel 8",
+      "distance": 350
     }
   ]
 }
