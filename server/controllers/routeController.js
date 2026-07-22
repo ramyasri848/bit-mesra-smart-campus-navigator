@@ -1,59 +1,36 @@
 import Building from "../models/Building.js";
-import Road from "../models/Road.js";
-import fs from "fs-extra";
-import { execFile } from "child_process";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const getShortestRoute = async (req, res) => {
-    try {
 
-        const buildings = await Building.find();
-        const roads = await Road.find();
+  try {
 
-        const graphData = {
-            buildings,
-            roads
-        };
+    const { source, destination } = req.body;
 
-        // Path to cpp-engine
-        const cppDir = path.join(__dirname, "../../cpp-engine");
+    const sourceBuilding = await Building.findById(source);
 
-        // Create graph.json
-        await fs.writeJson(
-            path.join(cppDir, "graph.json"),
-            graphData,
-            { spaces: 2 }
-        );
+    const destinationBuilding = await Building.findById(destination);
 
-        // Run campus.exe
-        execFile(
-            path.join(cppDir, "campus.exe"),
-            (error, stdout, stderr) => {
-
-                if (error) {
-                    return res.status(500).json({
-                        success: false,
-                        message: error.message
-                    });
-                }
-
-                res.json({
-                    success: true,
-                    output: stdout
-                });
-            }
-        );
-
-    } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (!sourceBuilding || !destinationBuilding) {
+      return res.status(404).json({
+        success: false,
+        message: "Building not found"
+      });
     }
+
+    res.json({
+      success: true,
+      source: sourceBuilding.name,
+      destination: destinationBuilding.name,
+      message: "Source and destination received successfully"
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
+
 };

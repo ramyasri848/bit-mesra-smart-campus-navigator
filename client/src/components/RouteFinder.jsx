@@ -6,7 +6,7 @@ const RouteFinder = () => {
   const [buildings, setBuildings] = useState([]);
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
 
@@ -41,12 +41,21 @@ const RouteFinder = () => {
 
   const findRoute = async () => {
 
+    if (!source || !destination) {
+      alert("Please select both source and destination.");
+      return;
+    }
+
     try {
 
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
+      const response = await axios.post(
         "http://localhost:5000/api/routes/shortest-path",
+        {
+          source,
+          destination
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -54,7 +63,9 @@ const RouteFinder = () => {
         }
       );
 
-      setResult(response.data.output);
+      console.log(response.data);
+
+      setResult(response.data);
 
     } catch (error) {
 
@@ -123,9 +134,35 @@ const RouteFinder = () => {
         Find Shortest Route
       </button>
 
-      <pre>
-        {result}
-      </pre>
+      {result && (
+
+        <div
+          style={{
+            marginTop: "20px",
+            padding: "15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            backgroundColor: "#f8f9fa"
+          }}
+        >
+
+          <h3>Route Details</h3>
+
+          <p>
+            <strong>Source:</strong> {result.source}
+          </p>
+
+          <p>
+            <strong>Destination:</strong> {result.destination}
+          </p>
+
+          <p>
+            <strong>Message:</strong> {result.message}
+          </p>
+
+        </div>
+
+      )}
 
     </div>
 

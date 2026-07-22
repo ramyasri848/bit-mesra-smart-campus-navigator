@@ -8,7 +8,7 @@ from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get(
+router.post(
     "/shortest-path",
     protect,
     getShortestRoute
