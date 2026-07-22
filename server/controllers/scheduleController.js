@@ -32,3 +32,54 @@ export const getSchedules = async (req, res) => {
     });
   }
 };
+export const getNextClass = async (req, res) => {
+
+    try {
+
+        const today = new Date().toLocaleDateString("en-US", {
+            weekday: "long"
+        });
+
+        const currentTime = new Date().toTimeString().slice(0, 5);
+
+        const nextClass = await Schedule.findOne({
+
+            day: today,
+
+            startTime: { $gte: currentTime }
+
+        }).sort({ startTime: 1 });
+
+        if (!nextClass) {
+
+            return res.json({
+
+                success: true,
+
+                message: "No more classes today"
+
+            });
+
+        }
+
+        res.json({
+
+            success: true,
+
+            data: nextClass
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            success: false,
+
+            message: error.message
+
+        });
+
+    }
+
+};

@@ -1,14 +1,19 @@
+import NextClass from "./components/NextClass";
 import RouteFinder from "./components/RouteFinder";
 import CampusMap from "./components/CampusMap";
-import { RouteProvider } from "./components/RouteContext";
 
 function App() {
-  return (
-    <RouteProvider>
-      <RouteFinder />
-      <CampusMap />
-    </RouteProvider>
-  );
+
+    return (
+
+        <>
+            <NextClass />
+            <RouteFinder />
+            <CampusMap />
+        </>
+
+    );
+
 }
 
 export default App;
