@@ -29,6 +29,7 @@ const buildingSchema = new mongoose.Schema(
         "Medical",
         "Parking",
         "Other",
+         "Security"
       ],
       default: "Academic",
     },
