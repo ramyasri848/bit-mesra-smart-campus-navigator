@@ -11,6 +11,7 @@ import routeRoutes from "./routes/routeRoutes.js";
 import scheduleRoutes from "./routes/scheduleRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import emergencyRoutes from "./routes/emergencyRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/routes", routeRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/emergency", emergencyRoutes);
+app.use("/api/search", searchRoutes);
 
 app.get("/", (req, res) => {
   res.json({
